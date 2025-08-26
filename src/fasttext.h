@@ -120,6 +120,8 @@ class FastText {
 
   void loadModel(const std::string& filename);
 
+  void loadModelFromBuffer(const void* data, size_t size);
+
   void getSentenceVector(std::istream& in, Vector& vec);
 
   void quantize(const Args& qargs, const TrainCallback& callback = {});

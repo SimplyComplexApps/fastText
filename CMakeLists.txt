@@ -6,7 +6,7 @@
 # LICENSE file in the root directory of this source tree.
 #
 
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 4.0.0)
 project(fasttext)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -17,7 +17,9 @@ set (fasttext_VERSION_MINOR 1)
 
 include_directories(fasttext)
 
-set(CMAKE_CXX_FLAGS " -pthread -std=c++17 -funroll-loops -O3 -march=native")
+if(NOT MSVC)
+  set(CMAKE_CXX_FLAGS " -pthread -std=c++17 -funroll-loops -O3 -march=native")
+endif()
 
 set(HEADER_FILES
     src/args.h
@@ -33,7 +35,8 @@ set(HEADER_FILES
     src/quantmatrix.h
     src/real.h
     src/utils.h
-    src/vector.h)
+    src/vector.h
+    src/c_api.h)
 
 set(SOURCE_FILES
     src/args.cc
@@ -49,7 +52,8 @@ set(SOURCE_FILES
     src/productquantizer.cc
     src/quantmatrix.cc
     src/utils.cc
-    src/vector.cc)
+    src/vector.cc
+    src/c_api.cc)
 
 
 if (NOT MSVC)
@@ -67,7 +71,10 @@ set_target_properties(fasttext-static PROPERTIES OUTPUT_NAME fasttext)
 set_target_properties(fasttext-static_pic PROPERTIES OUTPUT_NAME fasttext_pic
   POSITION_INDEPENDENT_CODE True)
 add_executable(fasttext-bin src/main.cc)
-target_link_libraries(fasttext-bin pthread fasttext-static)
+target_link_libraries(fasttext-bin fasttext-static)
+if(NOT MSVC)
+  target_link_libraries(pthread)
+endif()
 set_target_properties(fasttext-bin PROPERTIES PUBLIC_HEADER "${HEADER_FILES}" OUTPUT_NAME fasttext)
 install (TARGETS fasttext-shared
     LIBRARY DESTINATION lib)
@@ -78,3 +85,5 @@ install (TARGETS fasttext-static_pic
 install (TARGETS fasttext-bin
     RUNTIME DESTINATION bin
  PUBLIC_HEADER DESTINATION include/fasttext)
+
+add_subdirectory(examples)
