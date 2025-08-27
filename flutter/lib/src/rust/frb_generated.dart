@@ -3,13 +3,13 @@
 
 // ignore_for_file: unused_import, unused_element, unnecessary_import, duplicate_ignore, invalid_use_of_internal_member, annotate_overrides, non_constant_identifier_names, curly_braces_in_flow_control_structures, prefer_const_literals_to_create_immutables, unused_field
 
+import 'api/fasttext.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'frb_generated.dart';
 import 'frb_generated.io.dart'
     if (dart.library.js_interop) 'frb_generated.web.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
-import 'third_party/fasttext.dart';
 
 /// Main entrypoint of the Rust API
 class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
@@ -55,7 +55,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 
   @override
   Future<void> executeRustInitializers() async {
-    await api.crateApiSimpleInitApp();
+    await api.crateApiInitApp();
   }
 
   @override
@@ -66,39 +66,39 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => 1258987832;
+  int get rustContentHash => -1255547644;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
-        stem: 'fasttext_wrapper',
+        stem: 'fasttext',
         ioDirectory: 'rust/target/release/',
         webPrefix: 'pkg/',
       );
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<FastText> fasttextFastTextDefault();
+  Future<FastText> crateApiFasttextFastTextDefault();
 
-  Future<void> fasttextFastTextLoadModel({
+  Future<void> crateApiFasttextFastTextLoadModel({
     required FastText that,
     required String path,
   });
 
-  Future<void> fasttextFastTextLoadModelFromBuffer({
+  Future<void> crateApiFasttextFastTextLoadModelFromBuffer({
     required FastText that,
     required List<int> buffer,
   });
 
-  Future<FastText> fasttextFastTextNew();
+  FastText crateApiFasttextFastTextNew();
 
-  Future<List<Prediction>> fasttextFastTextPredict({
+  Future<List<Prediction>> crateApiFasttextFastTextPredict({
     required FastText that,
     required String text,
     required int k,
     required double threshold,
   });
 
-  Future<void> crateApiSimpleInitApp();
+  Future<void> crateApiInitApp();
 
   RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_FastText;
@@ -118,7 +118,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  Future<FastText> fasttextFastTextDefault() {
+  Future<FastText> crateApiFasttextFastTextDefault() {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
@@ -135,18 +135,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
               sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText,
           decodeErrorData: null,
         ),
-        constMeta: kFasttextFastTextDefaultConstMeta,
+        constMeta: kCrateApiFasttextFastTextDefaultConstMeta,
         argValues: [],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kFasttextFastTextDefaultConstMeta =>
+  TaskConstMeta get kCrateApiFasttextFastTextDefaultConstMeta =>
       const TaskConstMeta(debugName: "FastText_default", argNames: []);
 
   @override
-  Future<void> fasttextFastTextLoadModel({
+  Future<void> crateApiFasttextFastTextLoadModel({
     required FastText that,
     required String path,
   }) {
@@ -170,20 +170,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           decodeSuccessData: sse_decode_unit,
           decodeErrorData: sse_decode_String,
         ),
-        constMeta: kFasttextFastTextLoadModelConstMeta,
+        constMeta: kCrateApiFasttextFastTextLoadModelConstMeta,
         argValues: [that, path],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kFasttextFastTextLoadModelConstMeta => const TaskConstMeta(
-    debugName: "FastText_load_model",
-    argNames: ["that", "path"],
-  );
+  TaskConstMeta get kCrateApiFasttextFastTextLoadModelConstMeta =>
+      const TaskConstMeta(
+        debugName: "FastText_load_model",
+        argNames: ["that", "path"],
+      );
 
   @override
-  Future<void> fasttextFastTextLoadModelFromBuffer({
+  Future<void> crateApiFasttextFastTextLoadModelFromBuffer({
     required FastText that,
     required List<int> buffer,
   }) {
@@ -207,49 +208,44 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           decodeSuccessData: sse_decode_unit,
           decodeErrorData: sse_decode_String,
         ),
-        constMeta: kFasttextFastTextLoadModelFromBufferConstMeta,
+        constMeta: kCrateApiFasttextFastTextLoadModelFromBufferConstMeta,
         argValues: [that, buffer],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kFasttextFastTextLoadModelFromBufferConstMeta =>
+  TaskConstMeta get kCrateApiFasttextFastTextLoadModelFromBufferConstMeta =>
       const TaskConstMeta(
         debugName: "FastText_load_model_from_buffer",
         argNames: ["that", "buffer"],
       );
 
   @override
-  Future<FastText> fasttextFastTextNew() {
-    return handler.executeNormal(
-      NormalTask(
-        callFfi: (port_) {
+  FastText crateApiFasttextFastTextNew() {
+    return handler.executeSync(
+      SyncTask(
+        callFfi: () {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          pdeCallFfi(
-            generalizedFrbRustBinding,
-            serializer,
-            funcId: 4,
-            port: port_,
-          );
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
         },
         codec: SseCodec(
           decodeSuccessData:
               sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText,
           decodeErrorData: sse_decode_String,
         ),
-        constMeta: kFasttextFastTextNewConstMeta,
+        constMeta: kCrateApiFasttextFastTextNewConstMeta,
         argValues: [],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kFasttextFastTextNewConstMeta =>
+  TaskConstMeta get kCrateApiFasttextFastTextNewConstMeta =>
       const TaskConstMeta(debugName: "FastText_new", argNames: []);
 
   @override
-  Future<List<Prediction>> fasttextFastTextPredict({
+  Future<List<Prediction>> crateApiFasttextFastTextPredict({
     required FastText that,
     required String text,
     required int k,
@@ -277,20 +273,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           decodeSuccessData: sse_decode_list_prediction,
           decodeErrorData: sse_decode_String,
         ),
-        constMeta: kFasttextFastTextPredictConstMeta,
+        constMeta: kCrateApiFasttextFastTextPredictConstMeta,
         argValues: [that, text, k, threshold],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kFasttextFastTextPredictConstMeta => const TaskConstMeta(
-    debugName: "FastText_predict",
-    argNames: ["that", "text", "k", "threshold"],
-  );
+  TaskConstMeta get kCrateApiFasttextFastTextPredictConstMeta =>
+      const TaskConstMeta(
+        debugName: "FastText_predict",
+        argNames: ["that", "text", "k", "threshold"],
+      );
 
   @override
-  Future<void> crateApiSimpleInitApp() {
+  Future<void> crateApiInitApp() {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
@@ -306,14 +303,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           decodeSuccessData: sse_decode_unit,
           decodeErrorData: null,
         ),
-        constMeta: kCrateApiSimpleInitAppConstMeta,
+        constMeta: kCrateApiInitAppConstMeta,
         argValues: [],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kCrateApiSimpleInitAppConstMeta =>
+  TaskConstMeta get kCrateApiInitAppConstMeta =>
       const TaskConstMeta(debugName: "init_app", argNames: []);
 
   RustArcIncrementStrongCountFnType
@@ -709,8 +706,8 @@ class FastTextImpl extends RustOpaque implements FastText {
   /// # Arguments
   ///
   /// * `path` - The file path of the model to load.
-  Future<void> loadModel({required String path}) =>
-      RustLib.instance.api.fasttextFastTextLoadModel(that: this, path: path);
+  Future<void> loadModel({required String path}) => RustLib.instance.api
+      .crateApiFasttextFastTextLoadModel(that: this, path: path);
 
   /// Loads a model from a buffer.
   ///
@@ -720,7 +717,7 @@ class FastTextImpl extends RustOpaque implements FastText {
   Future<void> loadModelFromBuffer({required List<int> buffer}) => RustLib
       .instance
       .api
-      .fasttextFastTextLoadModelFromBuffer(that: this, buffer: buffer);
+      .crateApiFasttextFastTextLoadModelFromBuffer(that: this, buffer: buffer);
 
   /// Predicts labels for a given text.
   ///
@@ -733,7 +730,7 @@ class FastTextImpl extends RustOpaque implements FastText {
     required String text,
     required int k,
     required double threshold,
-  }) => RustLib.instance.api.fasttextFastTextPredict(
+  }) => RustLib.instance.api.crateApiFasttextFastTextPredict(
     that: this,
     text: text,
     k: k,

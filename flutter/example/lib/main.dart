@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
   String? predsStr;
 
   void init() async {
-    fasttext = await FastText.newInstance();
+    fasttext = FastText();
     print('fasttext loaded!');
     print('Loading model');
     final modelByteData = await rootBundle.load('assets/models/lid.176.ftz');

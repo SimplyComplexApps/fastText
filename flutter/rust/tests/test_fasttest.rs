@@ -1,4 +1,4 @@
-use fasttext::{FastText};
+use fasttext::api::fasttext::FastText;
 
 #[test]
 fn test_fasttext_predict() {

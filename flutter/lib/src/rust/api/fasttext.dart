@@ -11,7 +11,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<FastText>>
 abstract class FastText implements RustOpaqueInterface {
   static Future<FastText> default_() =>
-      RustLib.instance.api.fasttextFastTextDefault();
+      RustLib.instance.api.crateApiFasttextFastTextDefault();
 
   /// Loads a model from the given path.
   ///
@@ -27,10 +27,8 @@ abstract class FastText implements RustOpaqueInterface {
   /// * `buffer` - A byte slice containing the model data.
   Future<void> loadModelFromBuffer({required List<int> buffer});
 
-  // HINT: Make it `#[frb(sync)]` to let it become the default constructor of Dart class.
   /// Creates a new fastText instance.
-  static Future<FastText> newInstance() =>
-      RustLib.instance.api.fasttextFastTextNew();
+  factory FastText() => RustLib.instance.api.crateApiFasttextFastTextNew();
 
   /// Predicts labels for a given text.
   ///

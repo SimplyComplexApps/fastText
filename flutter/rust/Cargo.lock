@@ -262,17 +262,10 @@ dependencies = [
 
 [[package]]
 name = "fasttext"
-version = "0.1.0"
+version = "0.0.0"
 dependencies = [
  "bindgen",
  "cc",
-]
-
-[[package]]
-name = "fasttext_wrapper"
-version = "0.1.0"
-dependencies = [
- "fasttext",
  "flutter_rust_bridge",
 ]
 

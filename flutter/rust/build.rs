@@ -8,7 +8,7 @@ fn main() {
   let bindings = bindgen::Builder::default()
     // The input header we would like to generate
     // bindings for.
-    .header("../src/c_api.h")
+    .header("../../src/c_api.h")
     // Tell cargo to invalidate the built crate whenever any of the
     // included header files changed.
     .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
@@ -22,7 +22,7 @@ fn main() {
   bindings
     .write_to_file(out_path.join("bindings.rs"))
     .expect("Couldn't write bindings!");
-    
+
   // Build fasttext C++
   let mut build = cc::Build::new();
   let compiler = build.get_compiler();
@@ -37,22 +37,22 @@ fn main() {
     .cpp(true)
     .std("c++17")
     .files([
-      "../src/args.cc",
-      "../src/c_api.cc",
-      "../src/autotune.cc",
-      "../src/matrix.cc",
-      "../src/dictionary.cc",
-      "../src/loss.cc",
-      "../src/productquantizer.cc",
-      "../src/densematrix.cc",
-      "../src/quantmatrix.cc",
-      "../src/vector.cc",
-      "../src/model.cc",
-      "../src/utils.cc",
-      "../src/meter.cc",
-      "../src/fasttext.cc",
+      "../../src/args.cc",
+      "../../src/c_api.cc",
+      "../../src/autotune.cc",
+      "../../src/matrix.cc",
+      "../../src/dictionary.cc",
+      "../../src/loss.cc",
+      "../../src/productquantizer.cc",
+      "../../src/densematrix.cc",
+      "../../src/quantmatrix.cc",
+      "../../src/vector.cc",
+      "../../src/model.cc",
+      "../../src/utils.cc",
+      "../../src/meter.cc",
+      "../../src/fasttext.cc",
     ])
-    .includes(["../src"])
+    .includes(["../../src"])
     .flag_if_supported("-pthread")
     .flag_if_supported("-funroll-loops")
     .compile("fasttext-static");

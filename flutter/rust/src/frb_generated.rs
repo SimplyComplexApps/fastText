@@ -25,7 +25,7 @@
 
 // Section: imports
 
-use fasttext::*;
+use crate::api::fasttext::*;
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
 use flutter_rust_bridge::for_generated::{transform_result_dco, Lifetimeable, Lockable};
 use flutter_rust_bridge::{Handler, IntoIntoDart};
@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 1258987832;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1255547644;
 
 // Section: executor
 
@@ -46,7 +46,7 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
-fn wire__fasttext__FastText_default_impl(
+fn wire__crate__api__fasttext__FastText_default_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -71,14 +71,14 @@ fn wire__fasttext__FastText_default_impl(
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, ()>((move || {
-                    let output_ok = Result::<_, ()>::Ok(fasttext::FastText::default())?;
+                    let output_ok = Result::<_, ()>::Ok(crate::api::fasttext::FastText::default())?;
                     Ok(output_ok)
                 })())
             }
         },
     )
 }
-fn wire__fasttext__FastText_load_model_impl(
+fn wire__crate__api__fasttext__FastText_load_model_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -121,15 +121,17 @@ fn wire__fasttext__FastText_load_model_impl(
                         }
                     }
                     let mut api_that_guard = api_that_guard.unwrap();
-                    let output_ok =
-                        fasttext::FastText::load_model(&mut *api_that_guard, &api_path)?;
+                    let output_ok = crate::api::fasttext::FastText::load_model(
+                        &mut *api_that_guard,
+                        &api_path,
+                    )?;
                     Ok(output_ok)
                 })())
             }
         },
     )
 }
-fn wire__fasttext__FastText_load_model_from_buffer_impl(
+fn wire__crate__api__fasttext__FastText_load_model_from_buffer_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -172,7 +174,7 @@ fn wire__fasttext__FastText_load_model_from_buffer_impl(
                         }
                     }
                     let mut api_that_guard = api_that_guard.unwrap();
-                    let output_ok = fasttext::FastText::load_model_from_buffer(
+                    let output_ok = crate::api::fasttext::FastText::load_model_from_buffer(
                         &mut *api_that_guard,
                         &api_buffer,
                     )?;
@@ -182,17 +184,16 @@ fn wire__fasttext__FastText_load_model_from_buffer_impl(
         },
     )
 }
-fn wire__fasttext__FastText_new_impl(
-    port_: flutter_rust_bridge::for_generated::MessagePort,
+fn wire__crate__api__fasttext__FastText_new_impl(
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
     data_len_: i32,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::SseCodec, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "FastText_new",
-            port: Some(port_),
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+            port: None,
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
         },
         move || {
             let message = unsafe {
@@ -205,16 +206,14 @@ fn wire__fasttext__FastText_new_impl(
             let mut deserializer =
                 flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             deserializer.end();
-            move |context| {
-                transform_result_sse::<_, String>((move || {
-                    let output_ok = fasttext::FastText::new()?;
-                    Ok(output_ok)
-                })())
-            }
+            transform_result_sse::<_, String>((move || {
+                let output_ok = crate::api::fasttext::FastText::new()?;
+                Ok(output_ok)
+            })())
         },
     )
 }
-fn wire__fasttext__FastText_predict_impl(
+fn wire__crate__api__fasttext__FastText_predict_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -259,7 +258,7 @@ fn wire__fasttext__FastText_predict_impl(
                         }
                     }
                     let api_that_guard = api_that_guard.unwrap();
-                    let output_ok = fasttext::FastText::predict(
+                    let output_ok = crate::api::fasttext::FastText::predict(
                         &*api_that_guard,
                         &api_text,
                         api_k,
@@ -271,7 +270,7 @@ fn wire__fasttext__FastText_predict_impl(
         },
     )
 }
-fn wire__crate__api__simple__init_app_impl(
+fn wire__crate__api__init_app_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -297,7 +296,7 @@ fn wire__crate__api__simple__init_app_impl(
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok({
-                        crate::api::simple::init_app();
+                        crate::api::init_app();
                     })?;
                     Ok(output_ok)
                 })())
@@ -305,15 +304,6 @@ fn wire__crate__api__simple__init_app_impl(
         },
     )
 }
-
-// Section: static_checks
-
-#[allow(clippy::unnecessary_literal_unwrap)]
-const _: fn() = || {
-    let Prediction = None::<fasttext::Prediction>.unwrap();
-    let _: f32 = Prediction.probability;
-    let _: String = Prediction.label;
-};
 
 // Section: related_funcs
 
@@ -365,13 +355,13 @@ impl SseDecode for i32 {
     }
 }
 
-impl SseDecode for Vec<fasttext::Prediction> {
+impl SseDecode for Vec<crate::api::fasttext::Prediction> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut len_ = <i32>::sse_decode(deserializer);
         let mut ans_ = vec![];
         for idx_ in 0..len_ {
-            ans_.push(<fasttext::Prediction>::sse_decode(deserializer));
+            ans_.push(<crate::api::fasttext::Prediction>::sse_decode(deserializer));
         }
         return ans_;
     }
@@ -389,12 +379,12 @@ impl SseDecode for Vec<u8> {
     }
 }
 
-impl SseDecode for fasttext::Prediction {
+impl SseDecode for crate::api::fasttext::Prediction {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_probability = <f32>::sse_decode(deserializer);
         let mut var_label = <String>::sse_decode(deserializer);
-        return fasttext::Prediction {
+        return crate::api::fasttext::Prediction {
             probability: var_probability,
             label: var_label,
         };
@@ -436,14 +426,18 @@ fn pde_ffi_dispatcher_primary_impl(
 ) {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        1 => wire__fasttext__FastText_default_impl(port, ptr, rust_vec_len, data_len),
-        2 => wire__fasttext__FastText_load_model_impl(port, ptr, rust_vec_len, data_len),
-        3 => {
-            wire__fasttext__FastText_load_model_from_buffer_impl(port, ptr, rust_vec_len, data_len)
+        1 => wire__crate__api__fasttext__FastText_default_impl(port, ptr, rust_vec_len, data_len),
+        2 => {
+            wire__crate__api__fasttext__FastText_load_model_impl(port, ptr, rust_vec_len, data_len)
         }
-        4 => wire__fasttext__FastText_new_impl(port, ptr, rust_vec_len, data_len),
-        5 => wire__fasttext__FastText_predict_impl(port, ptr, rust_vec_len, data_len),
-        6 => wire__crate__api__simple__init_app_impl(port, ptr, rust_vec_len, data_len),
+        3 => wire__crate__api__fasttext__FastText_load_model_from_buffer_impl(
+            port,
+            ptr,
+            rust_vec_len,
+            data_len,
+        ),
+        5 => wire__crate__api__fasttext__FastText_predict_impl(port, ptr, rust_vec_len, data_len),
+        6 => wire__crate__api__init_app_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -456,6 +450,7 @@ fn pde_ffi_dispatcher_sync_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
+        4 => wire__crate__api__fasttext__FastText_new_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -478,22 +473,24 @@ impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<FastText>> for FastText {
 }
 
 // Codec=Dco (DartCObject based), see doc to use other codecs
-impl flutter_rust_bridge::IntoDart for FrbWrapper<fasttext::Prediction> {
+impl flutter_rust_bridge::IntoDart for crate::api::fasttext::Prediction {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
-            self.0.probability.into_into_dart().into_dart(),
-            self.0.label.into_into_dart().into_dart(),
+            self.probability.into_into_dart().into_dart(),
+            self.label.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for FrbWrapper<fasttext::Prediction>
+    for crate::api::fasttext::Prediction
 {
 }
-impl flutter_rust_bridge::IntoIntoDart<FrbWrapper<fasttext::Prediction>> for fasttext::Prediction {
-    fn into_into_dart(self) -> FrbWrapper<fasttext::Prediction> {
-        self.into()
+impl flutter_rust_bridge::IntoIntoDart<crate::api::fasttext::Prediction>
+    for crate::api::fasttext::Prediction
+{
+    fn into_into_dart(self) -> crate::api::fasttext::Prediction {
+        self
     }
 }
 
@@ -536,12 +533,12 @@ impl SseEncode for i32 {
     }
 }
 
-impl SseEncode for Vec<fasttext::Prediction> {
+impl SseEncode for Vec<crate::api::fasttext::Prediction> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
-            <fasttext::Prediction>::sse_encode(item, serializer);
+            <crate::api::fasttext::Prediction>::sse_encode(item, serializer);
         }
     }
 }
@@ -556,7 +553,7 @@ impl SseEncode for Vec<u8> {
     }
 }
 
-impl SseEncode for fasttext::Prediction {
+impl SseEncode for crate::api::fasttext::Prediction {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <f32>::sse_encode(self.probability, serializer);
@@ -601,7 +598,7 @@ mod io {
     // Section: imports
 
     use super::*;
-    use fasttext::*;
+    use crate::api::fasttext::*;
     use flutter_rust_bridge::for_generated::byteorder::{
         NativeEndian, ReadBytesExt, WriteBytesExt,
     };
@@ -638,7 +635,7 @@ mod web {
     // Section: imports
 
     use super::*;
-    use fasttext::*;
+    use crate::api::fasttext::*;
     use flutter_rust_bridge::for_generated::byteorder::{
         NativeEndian, ReadBytesExt, WriteBytesExt,
     };
