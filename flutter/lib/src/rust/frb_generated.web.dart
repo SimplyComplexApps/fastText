@@ -61,13 +61,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<Prediction> dco_decode_list_prediction(dynamic raw);
 
   @protected
+  Float32List dco_decode_list_prim_f_32_strict(dynamic raw);
+
+  @protected
   List<int> dco_decode_list_prim_u_8_loose(dynamic raw);
 
   @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
 
   @protected
+  List<(double, String)> dco_decode_list_record_f_32_string(dynamic raw);
+
+  @protected
   Prediction dco_decode_prediction(dynamic raw);
+
+  @protected
+  (double, String) dco_decode_record_f_32_string(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -115,13 +124,24 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<Prediction> sse_decode_list_prediction(SseDeserializer deserializer);
 
   @protected
+  Float32List sse_decode_list_prim_f_32_strict(SseDeserializer deserializer);
+
+  @protected
   List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer);
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
 
   @protected
+  List<(double, String)> sse_decode_list_record_f_32_string(
+    SseDeserializer deserializer,
+  );
+
+  @protected
   Prediction sse_decode_prediction(SseDeserializer deserializer);
+
+  @protected
+  (double, String) sse_decode_record_f_32_string(SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_8(SseDeserializer deserializer);
@@ -179,6 +199,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_list_prim_f_32_strict(
+    Float32List self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_list_prim_u_8_loose(List<int> self, SseSerializer serializer);
 
   @protected
@@ -188,7 +214,19 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   );
 
   @protected
+  void sse_encode_list_record_f_32_string(
+    List<(double, String)> self,
+    SseSerializer serializer,
+  );
+
+  @protected
   void sse_encode_prediction(Prediction self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_record_f_32_string(
+    (double, String) self,
+    SseSerializer serializer,
+  );
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);

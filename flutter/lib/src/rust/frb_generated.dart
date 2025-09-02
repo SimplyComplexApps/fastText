@@ -66,7 +66,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -1255547644;
+  int get rustContentHash => 230966499;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -78,6 +78,42 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 
 abstract class RustLibApi extends BaseApi {
   Future<FastText> crateApiFasttextFastTextDefault();
+
+  Future<List<(double, String)>> crateApiFasttextFastTextGetAnalogies({
+    required FastText that,
+    required int k,
+    required String wordA,
+    required String wordB,
+    required String wordC,
+  });
+
+  Future<int> crateApiFasttextFastTextGetDimension({required FastText that});
+
+  Future<List<(double, String)>> crateApiFasttextFastTextGetNn({
+    required FastText that,
+    required String word,
+    required int k,
+  });
+
+  Future<Float32List> crateApiFasttextFastTextGetSentenceVector({
+    required FastText that,
+    required String text,
+  });
+
+  Future<int> crateApiFasttextFastTextGetSubwordId({
+    required FastText that,
+    required String word,
+  });
+
+  Future<int> crateApiFasttextFastTextGetWordId({
+    required FastText that,
+    required String word,
+  });
+
+  Future<Float32List> crateApiFasttextFastTextGetWordVector({
+    required FastText that,
+    required String word,
+  });
 
   Future<void> crateApiFasttextFastTextLoadModel({
     required FastText that,
@@ -96,6 +132,11 @@ abstract class RustLibApi extends BaseApi {
     required String text,
     required int k,
     required double threshold,
+  });
+
+  Future<void> crateApiFasttextFastTextSaveModel({
+    required FastText that,
+    required String path,
   });
 
   Future<void> crateApiInitApp();
@@ -146,6 +187,276 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(debugName: "FastText_default", argNames: []);
 
   @override
+  Future<List<(double, String)>> crateApiFasttextFastTextGetAnalogies({
+    required FastText that,
+    required int k,
+    required String wordA,
+    required String wordB,
+    required String wordC,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText(
+            that,
+            serializer,
+          );
+          sse_encode_i_32(k, serializer);
+          sse_encode_String(wordA, serializer);
+          sse_encode_String(wordB, serializer);
+          sse_encode_String(wordC, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 2,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_record_f_32_string,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiFasttextFastTextGetAnalogiesConstMeta,
+        argValues: [that, k, wordA, wordB, wordC],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiFasttextFastTextGetAnalogiesConstMeta =>
+      const TaskConstMeta(
+        debugName: "FastText_get_analogies",
+        argNames: ["that", "k", "wordA", "wordB", "wordC"],
+      );
+
+  @override
+  Future<int> crateApiFasttextFastTextGetDimension({required FastText that}) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText(
+            that,
+            serializer,
+          );
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 3,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_i_32,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiFasttextFastTextGetDimensionConstMeta,
+        argValues: [that],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiFasttextFastTextGetDimensionConstMeta =>
+      const TaskConstMeta(
+        debugName: "FastText_get_dimension",
+        argNames: ["that"],
+      );
+
+  @override
+  Future<List<(double, String)>> crateApiFasttextFastTextGetNn({
+    required FastText that,
+    required String word,
+    required int k,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText(
+            that,
+            serializer,
+          );
+          sse_encode_String(word, serializer);
+          sse_encode_i_32(k, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 4,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_record_f_32_string,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiFasttextFastTextGetNnConstMeta,
+        argValues: [that, word, k],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiFasttextFastTextGetNnConstMeta =>
+      const TaskConstMeta(
+        debugName: "FastText_get_nn",
+        argNames: ["that", "word", "k"],
+      );
+
+  @override
+  Future<Float32List> crateApiFasttextFastTextGetSentenceVector({
+    required FastText that,
+    required String text,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText(
+            that,
+            serializer,
+          );
+          sse_encode_String(text, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 5,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_f_32_strict,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiFasttextFastTextGetSentenceVectorConstMeta,
+        argValues: [that, text],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiFasttextFastTextGetSentenceVectorConstMeta =>
+      const TaskConstMeta(
+        debugName: "FastText_get_sentence_vector",
+        argNames: ["that", "text"],
+      );
+
+  @override
+  Future<int> crateApiFasttextFastTextGetSubwordId({
+    required FastText that,
+    required String word,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText(
+            that,
+            serializer,
+          );
+          sse_encode_String(word, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 6,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_i_32,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiFasttextFastTextGetSubwordIdConstMeta,
+        argValues: [that, word],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiFasttextFastTextGetSubwordIdConstMeta =>
+      const TaskConstMeta(
+        debugName: "FastText_get_subword_id",
+        argNames: ["that", "word"],
+      );
+
+  @override
+  Future<int> crateApiFasttextFastTextGetWordId({
+    required FastText that,
+    required String word,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText(
+            that,
+            serializer,
+          );
+          sse_encode_String(word, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 7,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_i_32,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiFasttextFastTextGetWordIdConstMeta,
+        argValues: [that, word],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiFasttextFastTextGetWordIdConstMeta =>
+      const TaskConstMeta(
+        debugName: "FastText_get_word_id",
+        argNames: ["that", "word"],
+      );
+
+  @override
+  Future<Float32List> crateApiFasttextFastTextGetWordVector({
+    required FastText that,
+    required String word,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText(
+            that,
+            serializer,
+          );
+          sse_encode_String(word, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 8,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_list_prim_f_32_strict,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiFasttextFastTextGetWordVectorConstMeta,
+        argValues: [that, word],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiFasttextFastTextGetWordVectorConstMeta =>
+      const TaskConstMeta(
+        debugName: "FastText_get_word_vector",
+        argNames: ["that", "word"],
+      );
+
+  @override
   Future<void> crateApiFasttextFastTextLoadModel({
     required FastText that,
     required String path,
@@ -162,7 +473,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 2,
+            funcId: 9,
             port: port_,
           );
         },
@@ -200,7 +511,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 3,
+            funcId: 10,
             port: port_,
           );
         },
@@ -227,7 +538,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       SyncTask(
         callFfi: () {
           final serializer = SseSerializer(generalizedFrbRustBinding);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 4)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 11)!;
         },
         codec: SseCodec(
           decodeSuccessData:
@@ -265,7 +576,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 5,
+            funcId: 12,
             port: port_,
           );
         },
@@ -287,6 +598,44 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<void> crateApiFasttextFastTextSaveModel({
+    required FastText that,
+    required String path,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText(
+            that,
+            serializer,
+          );
+          sse_encode_String(path, serializer);
+          pdeCallFfi(
+            generalizedFrbRustBinding,
+            serializer,
+            funcId: 13,
+            port: port_,
+          );
+        },
+        codec: SseCodec(
+          decodeSuccessData: sse_decode_unit,
+          decodeErrorData: sse_decode_String,
+        ),
+        constMeta: kCrateApiFasttextFastTextSaveModelConstMeta,
+        argValues: [that, path],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiFasttextFastTextSaveModelConstMeta =>
+      const TaskConstMeta(
+        debugName: "FastText_save_model",
+        argNames: ["that", "path"],
+      );
+
+  @override
   Future<void> crateApiInitApp() {
     return handler.executeNormal(
       NormalTask(
@@ -295,7 +644,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           pdeCallFfi(
             generalizedFrbRustBinding,
             serializer,
-            funcId: 6,
+            funcId: 14,
             port: port_,
           );
         },
@@ -382,6 +731,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Float32List dco_decode_list_prim_f_32_strict(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as Float32List;
+  }
+
+  @protected
   List<int> dco_decode_list_prim_u_8_loose(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as List<int>;
@@ -394,6 +749,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<(double, String)> dco_decode_list_record_f_32_string(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return (raw as List<dynamic>).map(dco_decode_record_f_32_string).toList();
+  }
+
+  @protected
   Prediction dco_decode_prediction(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -403,6 +764,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       probability: dco_decode_f_32(arr[0]),
       label: dco_decode_String(arr[1]),
     );
+  }
+
+  @protected
+  (double, String) dco_decode_record_f_32_string(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (dco_decode_f_32(arr[0]), dco_decode_String(arr[1]));
   }
 
   @protected
@@ -503,6 +874,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Float32List sse_decode_list_prim_f_32_strict(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var len_ = sse_decode_i_32(deserializer);
+    return deserializer.buffer.getFloat32List(len_);
+  }
+
+  @protected
   List<int> sse_decode_list_prim_u_8_loose(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var len_ = sse_decode_i_32(deserializer);
@@ -517,11 +895,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<(double, String)> sse_decode_list_record_f_32_string(
+    SseDeserializer deserializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <(double, String)>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_record_f_32_string(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   Prediction sse_decode_prediction(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_probability = sse_decode_f_32(deserializer);
     var var_label = sse_decode_String(deserializer);
     return Prediction(probability: var_probability, label: var_label);
+  }
+
+  @protected
+  (double, String) sse_decode_record_f_32_string(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_field0 = sse_decode_f_32(deserializer);
+    var var_field1 = sse_decode_String(deserializer);
+    return (var_field0, var_field1);
   }
 
   @protected
@@ -630,6 +1030,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_prim_f_32_strict(
+    Float32List self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    serializer.buffer.putFloat32List(self);
+  }
+
+  @protected
   void sse_encode_list_prim_u_8_loose(
     List<int> self,
     SseSerializer serializer,
@@ -652,10 +1062,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_record_f_32_string(
+    List<(double, String)> self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_record_f_32_string(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_prediction(Prediction self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_f_32(self.probability, serializer);
     sse_encode_String(self.label, serializer);
+  }
+
+  @protected
+  void sse_encode_record_f_32_string(
+    (double, String) self,
+    SseSerializer serializer,
+  ) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_f_32(self.$1, serializer);
+    sse_encode_String(self.$2, serializer);
   }
 
   @protected
@@ -701,6 +1133,86 @@ class FastTextImpl extends RustOpaque implements FastText {
         RustLib.instance.api.rust_arc_decrement_strong_count_FastTextPtr,
   );
 
+  /// Solves the word analogy problem.
+  ///
+  /// Solve word analogy problems of the form "A is to B as C is to ?".
+  /// For example, "king is to queen as man is to ?". The goal is to find the word that best fits
+  /// the question mark (in this case, "woman").
+  ///
+  /// # Arguments
+  ///
+  /// * `k` - The number of analogies to return.
+  /// * `wordA` - The word A in "A is to B as C is to ?".
+  /// * `wordB` - The word B in "A is to B as C is to ?".
+  /// * `wordC` - The word C in "A is to B as C is to ?".
+  Future<List<(double, String)>> getAnalogies({
+    required int k,
+    required String wordA,
+    required String wordB,
+    required String wordC,
+  }) => RustLib.instance.api.crateApiFasttextFastTextGetAnalogies(
+    that: this,
+    k: k,
+    wordA: wordA,
+    wordB: wordB,
+    wordC: wordC,
+  );
+
+  /// Get dimension of the model.
+  Future<int> getDimension() =>
+      RustLib.instance.api.crateApiFasttextFastTextGetDimension(that: this);
+
+  /// Nearest neighbors for a given word.
+  ///
+  /// # Arguments
+  ///
+  /// * `word` - The word to find nearest neighbors for.
+  /// * `k` - The number of nearest neighbors to return.
+  Future<List<(double, String)>> getNn({
+    required String word,
+    required int k,
+  }) => RustLib.instance.api.crateApiFasttextFastTextGetNn(
+    that: this,
+    word: word,
+    k: k,
+  );
+
+  /// Get the vector of a sentence.
+  ///
+  /// # Arguments
+  ///
+  /// * `text` - The sentence to get the vector for.
+  Future<Float32List> getSentenceVector({required String text}) => RustLib
+      .instance
+      .api
+      .crateApiFasttextFastTextGetSentenceVector(that: this, text: text);
+
+  /// Get the subword ID of a word.
+  ///
+  /// # Arguments
+  ///
+  /// * `word` - The word to get the ID for.
+  Future<int> getSubwordId({required String word}) => RustLib.instance.api
+      .crateApiFasttextFastTextGetSubwordId(that: this, word: word);
+
+  /// Get the ID of a word.
+  ///
+  /// # Arguments
+  ///
+  /// * `word` - The word to get the ID for.
+  Future<int> getWordId({required String word}) => RustLib.instance.api
+      .crateApiFasttextFastTextGetWordId(that: this, word: word);
+
+  /// Get the vector of a word.
+  ///
+  /// # Arguments
+  ///
+  /// * `word` - The word to get the vector for.
+  Future<Float32List> getWordVector({required String word}) => RustLib
+      .instance
+      .api
+      .crateApiFasttextFastTextGetWordVector(that: this, word: word);
+
   /// Loads a model from the given path.
   ///
   /// # Arguments
@@ -736,4 +1248,12 @@ class FastTextImpl extends RustOpaque implements FastText {
     k: k,
     threshold: threshold,
   );
+
+  /// Saves a model to the given path.
+  ///
+  /// # Arguments
+  ///
+  /// * `path` - The file path of where to save the model.
+  Future<void> saveModel({required String path}) => RustLib.instance.api
+      .crateApiFasttextFastTextSaveModel(that: this, path: path);
 }

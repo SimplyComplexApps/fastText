@@ -13,6 +13,64 @@ abstract class FastText implements RustOpaqueInterface {
   static Future<FastText> default_() =>
       RustLib.instance.api.crateApiFasttextFastTextDefault();
 
+  /// Solves the word analogy problem.
+  ///
+  /// Solve word analogy problems of the form "A is to B as C is to ?".
+  /// For example, "king is to queen as man is to ?". The goal is to find the word that best fits
+  /// the question mark (in this case, "woman").
+  ///
+  /// # Arguments
+  ///
+  /// * `k` - The number of analogies to return.
+  /// * `wordA` - The word A in "A is to B as C is to ?".
+  /// * `wordB` - The word B in "A is to B as C is to ?".
+  /// * `wordC` - The word C in "A is to B as C is to ?".
+  Future<List<(double, String)>> getAnalogies({
+    required int k,
+    required String wordA,
+    required String wordB,
+    required String wordC,
+  });
+
+  /// Get dimension of the model.
+  Future<int> getDimension();
+
+  /// Nearest neighbors for a given word.
+  ///
+  /// # Arguments
+  ///
+  /// * `word` - The word to find nearest neighbors for.
+  /// * `k` - The number of nearest neighbors to return.
+  Future<List<(double, String)>> getNn({required String word, required int k});
+
+  /// Get the vector of a sentence.
+  ///
+  /// # Arguments
+  ///
+  /// * `text` - The sentence to get the vector for.
+  Future<Float32List> getSentenceVector({required String text});
+
+  /// Get the subword ID of a word.
+  ///
+  /// # Arguments
+  ///
+  /// * `word` - The word to get the ID for.
+  Future<int> getSubwordId({required String word});
+
+  /// Get the ID of a word.
+  ///
+  /// # Arguments
+  ///
+  /// * `word` - The word to get the ID for.
+  Future<int> getWordId({required String word});
+
+  /// Get the vector of a word.
+  ///
+  /// # Arguments
+  ///
+  /// * `word` - The word to get the vector for.
+  Future<Float32List> getWordVector({required String word});
+
   /// Loads a model from the given path.
   ///
   /// # Arguments
@@ -42,6 +100,13 @@ abstract class FastText implements RustOpaqueInterface {
     required int k,
     required double threshold,
   });
+
+  /// Saves a model to the given path.
+  ///
+  /// # Arguments
+  ///
+  /// * `path` - The file path of where to save the model.
+  Future<void> saveModel({required String path});
 }
 
 /// Represents a single prediction from the fastText model.
