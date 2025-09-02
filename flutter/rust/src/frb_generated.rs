@@ -38,7 +38,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.11.1";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1255547644;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = 60518991;
 
 // Section: executor
 
@@ -270,7 +270,7 @@ fn wire__crate__api__fasttext__FastText_predict_impl(
         },
     )
 }
-fn wire__crate__api__init_app_impl(
+fn wire__crate__api__main__init_app_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
     rust_vec_len_: i32,
@@ -296,7 +296,7 @@ fn wire__crate__api__init_app_impl(
             move |context| {
                 transform_result_sse::<_, ()>((move || {
                     let output_ok = Result::<_, ()>::Ok({
-                        crate::api::init_app();
+                        crate::api::main::init_app();
                     })?;
                     Ok(output_ok)
                 })())
@@ -437,7 +437,7 @@ fn pde_ffi_dispatcher_primary_impl(
             data_len,
         ),
         5 => wire__crate__api__fasttext__FastText_predict_impl(port, ptr, rust_vec_len, data_len),
-        6 => wire__crate__api__init_app_impl(port, ptr, rust_vec_len, data_len),
+        6 => wire__crate__api__main__init_app_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }

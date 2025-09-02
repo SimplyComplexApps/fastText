@@ -266,7 +266,15 @@ version = "0.0.0"
 dependencies = [
  "bindgen",
  "cc",
+ "fasttext_bindings",
  "flutter_rust_bridge",
+]
+
+[[package]]
+name = "fasttext_bindings"
+version = "0.1.0"
+dependencies = [
+ "bindgen",
 ]
 
 [[package]]

@@ -73,7 +73,7 @@ clean:
 
 
 EMCXX = em++
-EMCXXFLAGS = --bind --std=c++11 -s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s "EXTRA_EXPORTED_RUNTIME_METHODS=['addOnPostRun', 'FS']" -s "DISABLE_EXCEPTION_CATCHING=0" -s "EXCEPTION_DEBUG=1" -s "FORCE_FILESYSTEM=1" -s "MODULARIZE=1" -s "EXPORT_ES6=1" -s 'EXPORT_NAME="FastTextModule"' -Isrc/
+EMCXXFLAGS = --bind --std=c++11 -s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -s "EXPORTED_RUNTIME_METHODS=['addOnPostRun', 'FS']" -s "DISABLE_EXCEPTION_CATCHING=0" -s "EXCEPTION_DEBUG=1" -s "FORCE_FILESYSTEM=1" -s "MODULARIZE=1" -s "EXPORT_ES6=1" -s 'EXPORT_NAME="FastTextModule"' -Isrc/
 EMOBJS = args.bc autotune.bc matrix.bc dictionary.bc loss.bc productquantizer.bc densematrix.bc quantmatrix.bc vector.bc model.bc utils.bc meter.bc fasttext.bc main.bc
 
 
@@ -119,7 +119,5 @@ meter.bc: src/meter.cc src/meter.h
 fasttext.bc: src/fasttext.cc src/*.h
 	$(EMCXX) $(EMCXXFLAGS)  src/fasttext.cc -o fasttext.bc
 
-webassembly/fasttext_wasm.js: $(EMOBJS) webassembly/fasttext_wasm.cc Makefile
-	$(EMCXX) $(EMCXXFLAGS) $(EMOBJS) -o webassembly/fasttext_wasm.js
-
-
+webassembly/fasttext_wasm.js: webassembly/fasttext_wasm.cc Makefile
+	$(EMCXX) $(EMCXXFLAGS) src/args.cc src/autotune.cc src/matrix.cc src/dictionary.cc src/loss.cc src/productquantizer.cc src/densematrix.cc src/quantmatrix.cc src/vector.cc src/model.cc src/utils.cc src/meter.cc src/fasttext.cc webassembly/fasttext_wasm.cc -o webassembly/fasttext_wasm.js

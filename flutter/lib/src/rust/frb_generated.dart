@@ -55,7 +55,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 
   @override
   Future<void> executeRustInitializers() async {
-    await api.crateApiInitApp();
+    await api.crateApiMainInitApp();
   }
 
   @override
@@ -66,7 +66,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.11.1';
 
   @override
-  int get rustContentHash => -1255547644;
+  int get rustContentHash => 60518991;
 
   static const kDefaultExternalLibraryLoaderConfig =
       ExternalLibraryLoaderConfig(
@@ -98,7 +98,7 @@ abstract class RustLibApi extends BaseApi {
     required double threshold,
   });
 
-  Future<void> crateApiInitApp();
+  Future<void> crateApiMainInitApp();
 
   RustArcIncrementStrongCountFnType
   get rust_arc_increment_strong_count_FastText;
@@ -287,7 +287,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
-  Future<void> crateApiInitApp() {
+  Future<void> crateApiMainInitApp() {
     return handler.executeNormal(
       NormalTask(
         callFfi: (port_) {
@@ -303,14 +303,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           decodeSuccessData: sse_decode_unit,
           decodeErrorData: null,
         ),
-        constMeta: kCrateApiInitAppConstMeta,
+        constMeta: kCrateApiMainInitAppConstMeta,
         argValues: [],
         apiImpl: this,
       ),
     );
   }
 
-  TaskConstMeta get kCrateApiInitAppConstMeta =>
+  TaskConstMeta get kCrateApiMainInitAppConstMeta =>
       const TaskConstMeta(debugName: "init_app", argNames: []);
 
   RustArcIncrementStrongCountFnType

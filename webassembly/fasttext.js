@@ -7,7 +7,7 @@
  */
 
 import fastTextModularized from './fasttext_wasm.js';
-const fastTextModule = fastTextModularized();
+const fastTextModule = await fastTextModularized();
 
 let postRunFunc = null;
 const addOnPostRun = function(func) {
