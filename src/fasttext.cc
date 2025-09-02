@@ -271,6 +271,24 @@ void FastText::loadModel(std::istream& in) {
   buildModel();
 }
 
+class MemoryBuffer : public std::streambuf {
+public:
+    MemoryBuffer(const char* base, size_t size) {
+        char* p = const_cast<char*>(base);
+        this->setg(p, p, p + size);
+    }
+};
+
+void FastText::loadModelFromBuffer(const void* data, size_t size) {
+    MemoryBuffer membuf(reinterpret_cast<const char*>(data), size);
+    std::istream in(&membuf);
+
+    if (!checkModel(in)) {
+        throw std::invalid_argument("Model from buffer has wrong file format!");
+    }
+    loadModel(in);
+}
+
 std::tuple<int64_t, double, double> FastText::progressInfo(real progress) {
   double t = utils::getDuration(start_, std::chrono::steady_clock::now());
   double lr = args_->lr * (1.0 - progress);
