@@ -12,15 +12,17 @@ import 'frb_generated.io.dart'
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 /// Main entrypoint of the Rust API
-class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
+class FastTextLib
+    extends
+        BaseEntrypoint<FastTextLibApi, FastTextLibApiImpl, FastTextLibWire> {
   @internal
-  static final instance = RustLib._();
+  static final instance = FastTextLib._();
 
-  RustLib._();
+  FastTextLib._();
 
   /// Initialize flutter_rust_bridge
   static Future<void> init({
-    RustLibApi? api,
+    FastTextLibApi? api,
     BaseHandler? handler,
     ExternalLibrary? externalLibrary,
     bool forceSameCodegenVersion = true,
@@ -35,7 +37,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 
   /// Initialize flutter_rust_bridge in mock mode.
   /// No libraries for FFI are loaded.
-  static void initMock({required RustLibApi api}) {
+  static void initMock({required FastTextLibApi api}) {
     instance.initMockImpl(api: api);
   }
 
@@ -46,12 +48,12 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   static void dispose() => instance.disposeImpl();
 
   @override
-  ApiImplConstructor<RustLibApiImpl, RustLibWire> get apiImplConstructor =>
-      RustLibApiImpl.new;
+  ApiImplConstructor<FastTextLibApiImpl, FastTextLibWire>
+  get apiImplConstructor => FastTextLibApiImpl.new;
 
   @override
-  WireConstructor<RustLibWire> get wireConstructor =>
-      RustLibWire.fromExternalLibrary;
+  WireConstructor<FastTextLibWire> get wireConstructor =>
+      FastTextLibWire.fromExternalLibrary;
 
   @override
   Future<void> executeRustInitializers() async {
@@ -76,7 +78,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
       );
 }
 
-abstract class RustLibApi extends BaseApi {
+abstract class FastTextLibApi extends BaseApi {
   Future<FastText> crateApiFasttextFastTextDefault();
 
   Future<List<(double, String)>> crateApiFasttextFastTextGetAnalogies({
@@ -150,8 +152,9 @@ abstract class RustLibApi extends BaseApi {
   CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_FastTextPtr;
 }
 
-class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
-  RustLibApiImpl({
+class FastTextLibApiImpl extends FastTextLibApiImplPlatform
+    implements FastTextLibApi {
+  FastTextLibApiImpl({
     required super.handler,
     required super.wire,
     required super.generalizedFrbRustBinding,
@@ -1126,11 +1129,11 @@ class FastTextImpl extends RustOpaque implements FastText {
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
-        RustLib.instance.api.rust_arc_increment_strong_count_FastText,
+        FastTextLib.instance.api.rust_arc_increment_strong_count_FastText,
     rustArcDecrementStrongCount:
-        RustLib.instance.api.rust_arc_decrement_strong_count_FastText,
+        FastTextLib.instance.api.rust_arc_decrement_strong_count_FastText,
     rustArcDecrementStrongCountPtr:
-        RustLib.instance.api.rust_arc_decrement_strong_count_FastTextPtr,
+        FastTextLib.instance.api.rust_arc_decrement_strong_count_FastTextPtr,
   );
 
   /// Solves the word analogy problem.
@@ -1150,7 +1153,7 @@ class FastTextImpl extends RustOpaque implements FastText {
     required String wordA,
     required String wordB,
     required String wordC,
-  }) => RustLib.instance.api.crateApiFasttextFastTextGetAnalogies(
+  }) => FastTextLib.instance.api.crateApiFasttextFastTextGetAnalogies(
     that: this,
     k: k,
     wordA: wordA,
@@ -1160,7 +1163,7 @@ class FastTextImpl extends RustOpaque implements FastText {
 
   /// Get dimension of the model.
   Future<int> getDimension() =>
-      RustLib.instance.api.crateApiFasttextFastTextGetDimension(that: this);
+      FastTextLib.instance.api.crateApiFasttextFastTextGetDimension(that: this);
 
   /// Nearest neighbors for a given word.
   ///
@@ -1171,7 +1174,7 @@ class FastTextImpl extends RustOpaque implements FastText {
   Future<List<(double, String)>> getNn({
     required String word,
     required int k,
-  }) => RustLib.instance.api.crateApiFasttextFastTextGetNn(
+  }) => FastTextLib.instance.api.crateApiFasttextFastTextGetNn(
     that: this,
     word: word,
     k: k,
@@ -1182,7 +1185,7 @@ class FastTextImpl extends RustOpaque implements FastText {
   /// # Arguments
   ///
   /// * `text` - The sentence to get the vector for.
-  Future<Float32List> getSentenceVector({required String text}) => RustLib
+  Future<Float32List> getSentenceVector({required String text}) => FastTextLib
       .instance
       .api
       .crateApiFasttextFastTextGetSentenceVector(that: this, text: text);
@@ -1192,7 +1195,7 @@ class FastTextImpl extends RustOpaque implements FastText {
   /// # Arguments
   ///
   /// * `word` - The word to get the ID for.
-  Future<int> getSubwordId({required String word}) => RustLib.instance.api
+  Future<int> getSubwordId({required String word}) => FastTextLib.instance.api
       .crateApiFasttextFastTextGetSubwordId(that: this, word: word);
 
   /// Get the ID of a word.
@@ -1200,7 +1203,7 @@ class FastTextImpl extends RustOpaque implements FastText {
   /// # Arguments
   ///
   /// * `word` - The word to get the ID for.
-  Future<int> getWordId({required String word}) => RustLib.instance.api
+  Future<int> getWordId({required String word}) => FastTextLib.instance.api
       .crateApiFasttextFastTextGetWordId(that: this, word: word);
 
   /// Get the vector of a word.
@@ -1208,7 +1211,7 @@ class FastTextImpl extends RustOpaque implements FastText {
   /// # Arguments
   ///
   /// * `word` - The word to get the vector for.
-  Future<Float32List> getWordVector({required String word}) => RustLib
+  Future<Float32List> getWordVector({required String word}) => FastTextLib
       .instance
       .api
       .crateApiFasttextFastTextGetWordVector(that: this, word: word);
@@ -1218,7 +1221,7 @@ class FastTextImpl extends RustOpaque implements FastText {
   /// # Arguments
   ///
   /// * `path` - The file path of the model to load.
-  Future<void> loadModel({required String path}) => RustLib.instance.api
+  Future<void> loadModel({required String path}) => FastTextLib.instance.api
       .crateApiFasttextFastTextLoadModel(that: this, path: path);
 
   /// Loads a model from a buffer.
@@ -1226,7 +1229,7 @@ class FastTextImpl extends RustOpaque implements FastText {
   /// # Arguments
   ///
   /// * `buffer` - A byte slice containing the model data.
-  Future<void> loadModelFromBuffer({required List<int> buffer}) => RustLib
+  Future<void> loadModelFromBuffer({required List<int> buffer}) => FastTextLib
       .instance
       .api
       .crateApiFasttextFastTextLoadModelFromBuffer(that: this, buffer: buffer);
@@ -1242,7 +1245,7 @@ class FastTextImpl extends RustOpaque implements FastText {
     required String text,
     required int k,
     required double threshold,
-  }) => RustLib.instance.api.crateApiFasttextFastTextPredict(
+  }) => FastTextLib.instance.api.crateApiFasttextFastTextPredict(
     that: this,
     text: text,
     k: k,
@@ -1254,6 +1257,6 @@ class FastTextImpl extends RustOpaque implements FastText {
   /// # Arguments
   ///
   /// * `path` - The file path of where to save the model.
-  Future<void> saveModel({required String path}) => RustLib.instance.api
+  Future<void> saveModel({required String path}) => FastTextLib.instance.api
       .crateApiFasttextFastTextSaveModel(that: this, path: path);
 }

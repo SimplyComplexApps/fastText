@@ -6,12 +6,13 @@
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
+// These functions are ignored because they are not marked as `pub`: `handle_result`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `drop`, `eq`, `fmt`
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<FastText>>
 abstract class FastText implements RustOpaqueInterface {
   static Future<FastText> default_() =>
-      RustLib.instance.api.crateApiFasttextFastTextDefault();
+      FastTextLib.instance.api.crateApiFasttextFastTextDefault();
 
   /// Solves the word analogy problem.
   ///
@@ -86,7 +87,7 @@ abstract class FastText implements RustOpaqueInterface {
   Future<void> loadModelFromBuffer({required List<int> buffer});
 
   /// Creates a new fastText instance.
-  factory FastText() => RustLib.instance.api.crateApiFasttextFastTextNew();
+  factory FastText() => FastTextLib.instance.api.crateApiFasttextFastTextNew();
 
   /// Predicts labels for a given text.
   ///

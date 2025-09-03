@@ -1,31 +1,11 @@
-use crate::bindings::{fasttext_delete, fasttext_free_predictions, fasttext_load_model, fasttext_new, fasttext_predict, fasttext_load_model_from_buffer, fasttext_t, fasttext_get_nn, fasttext_free_float_char_pair, fasttext_get_analogies, fasttext_get_word_id, fasttext_get_subword_id, fasttext_save_model, fasttext_get_dimension, fasttext_get_word_vector, fasttext_get_sentence_vector, VoidResult, FastTextResult, FastTextPredictionResult, fasttext_prediction_t, FloatCharPairResult, fasttext_float_char_pair_t, Int32Result, IntResult};
+use fasttext_bindings::bindings::{
+  fasttext_delete, fasttext_free_predictions, fasttext_load_model, fasttext_new, fasttext_predict,
+  fasttext_load_model_from_buffer, fasttext_t, fasttext_get_nn, fasttext_free_float_char_pair,
+  fasttext_get_analogies, fasttext_get_word_id, fasttext_get_subword_id, fasttext_save_model,
+  fasttext_get_dimension, fasttext_get_word_vector, fasttext_get_sentence_vector, HasError
+};
 use std::ffi::{c_void, CStr, CString};
 use flutter_rust_bridge::frb;
-
-trait HasError {
-  type ResultType;
-
-  fn error(&self) -> *const std::os::raw::c_char;
-  fn result(&self) -> Self::ResultType;
-}
-
-macro_rules! impl_has_error {
-  ($t:ty, $res:ty) => {
-    impl HasError for $t {
-      type ResultType = $res;
-
-      fn error(&self) -> *const std::os::raw::c_char { self.error }
-      fn result(&self) -> Self::ResultType { self.result }
-    }
-  };
-}
-
-impl_has_error!(FastTextResult, *mut fasttext_t);
-impl_has_error!(VoidResult, *mut std::os::raw::c_void);
-impl_has_error!(FastTextPredictionResult, *mut fasttext_prediction_t);
-impl_has_error!(FloatCharPairResult, *mut fasttext_float_char_pair_t);
-impl_has_error!(Int32Result, i32);
-impl_has_error!(IntResult, std::os::raw::c_int);
 
 fn handle_result<T: HasError>(result: T) -> Result<T::ResultType, String> {
   let error = result.error();

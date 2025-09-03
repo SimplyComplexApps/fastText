@@ -4,7 +4,7 @@ import 'package:fasttext/fasttext.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  setUpAll(() async => await RustLib.init());
+  setUpAll(() async => await FastTextLib.init());
   // test('Can call rust function', () async {
   //   expect(greet(name: "Tom"), "Hello, Tom!");
   // });

@@ -12,8 +12,8 @@ import 'dart:convert';
 import 'frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated_web.dart';
 
-abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
-  RustLibApiImplPlatform({
+abstract class FastTextLibApiImplPlatform extends BaseApiImpl<FastTextLibWire> {
+  FastTextLibApiImplPlatform({
     required super.handler,
     required super.wire,
     required super.generalizedFrbRustBinding,
@@ -243,8 +243,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
 // Section: wire_class
 
-class RustLibWire implements BaseWire {
-  RustLibWire.fromExternalLibrary(ExternalLibrary lib);
+class FastTextLibWire implements BaseWire {
+  FastTextLibWire.fromExternalLibrary(ExternalLibrary lib);
 
   void
   rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText(
@@ -264,11 +264,11 @@ class RustLibWire implements BaseWire {
 }
 
 @JS('wasm_bindgen')
-external RustLibWasmModule get wasmModule;
+external FastTextLibWasmModule get wasmModule;
 
 @JS()
 @anonymous
-extension type RustLibWasmModule._(JSObject _) implements JSObject {
+extension type FastTextLibWasmModule._(JSObject _) implements JSObject {
   external void
   rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerFastText(
     int ptr,

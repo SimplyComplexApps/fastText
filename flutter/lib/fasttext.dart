@@ -1,4 +1,4 @@
 library;
 
 export 'src/rust/api/fasttext.dart';
-export 'src/rust/frb_generated.dart' show RustLib;
+export 'src/rust/frb_generated.dart' show FastTextLib;

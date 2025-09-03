@@ -5,7 +5,7 @@ import 'package:fasttext/fasttext.dart';
 import 'package:flutter/services.dart';
 
 Future<void> main() async {
-  await RustLib.init();
+  await FastTextLib.init();
   runApp(const MyApp());
 }
 
