@@ -56,4 +56,23 @@ fn main() {
     .flag_if_supported("-pthread")
     .flag_if_supported("-funroll-loops")
     .compile("fasttext-static");
+
+  // Tell Cargo to re-run if there are any changes to the C++ source files
+  match std::fs::read_dir("../../src") {
+    Ok(files) => {
+      for file_result in files {
+        match file_result {
+          Ok(file) => {
+            println!("cargo:rerun-if-changed={}", file.path().display());
+          }
+          Err(e) => {
+            eprintln!("Error reading directory entry: {}", e);
+          }
+        }
+      }
+    }
+    Err(e) => {
+      eprintln!("Error reading C++ source directory: {}", e);
+    }
+  }
 }

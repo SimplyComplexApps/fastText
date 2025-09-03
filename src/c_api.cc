@@ -117,10 +117,18 @@ extern "C" {
         fasttext::FastText* ft;
     };
 
-    fasttext_t* fasttext_new() {
-        auto* c_ft = new fasttext_t();
-        c_ft->ft = new fasttext::FastText();
-        return c_ft;
+    FastTextResult fasttext_new() {
+        const auto result = new FastTextResult();
+        try {
+            auto* c_ft = new fasttext_t();
+            c_ft->ft = new fasttext::FastText();
+            result->result = c_ft;
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
+        }
+        return *result;
     }
 
     void fasttext_delete(const fasttext_t* ft) {
@@ -128,39 +136,63 @@ extern "C" {
         delete ft;
     }
 
-    void fasttext_load_model(const fasttext_t* ft, const char* path) {
-        ft->ft->loadModel(std::string(path));
+    VoidResult fasttext_load_model(const fasttext_t* ft, const char* path) {
+        const auto result = new VoidResult();
+        try {
+            ft->ft->loadModel(std::string(path));
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
+        }
+        return *result;
     }
 
-    void fasttext_load_model_from_buffer(const fasttext_t* ft, const void* data, const size_t size) {
-        ft->ft->loadModelFromBuffer(data, size);
+    VoidResult fasttext_load_model_from_buffer(const fasttext_t* ft, const void* data, const size_t size) {
+        const auto result = new VoidResult();
+        try {
+            ft->ft->loadModelFromBuffer(data, size);
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
+        }
+        return *result;
     }
 
-    void fasttext_free_float_char_pair(const fasttext_get_float_char_pair_t* nns, const size_t n_nn) {
+    void fasttext_free_float_char_pair(const fasttext_float_char_pair_t* nns, const size_t n_nn) {
         for (int i = 0; i < n_nn; ++i) {
             delete[] nns[i].second;
         }
         delete[] nns;
     }
 
-    fasttext_get_float_char_pair_t* fasttext_get_nn(const fasttext_t* ft, const char* word, const int32_t k, size_t* n_neighbors) {
-        const std::vector<std::pair<fasttext::real, std::string>> neighbors = ft->ft->getNN(std::string(word), k);
+    FloatCharPairResult fasttext_get_nn(const fasttext_t* ft, const char* word, const int32_t k, size_t* n_neighbors) {
+        const auto result = new FloatCharPairResult();
+        try {
+            const std::vector<std::pair<fasttext::real, std::string>> neighbors = ft->ft->getNN(std::string(word), k);
 
-        *n_neighbors = neighbors.size();
-        if (*n_neighbors == 0) {
-            return nullptr;
+            *n_neighbors = neighbors.size();
+            if (*n_neighbors == 0) {
+                result->result = nullptr;
+            } else {
+                auto* c_neighbors = new fasttext_float_char_pair_t[*n_neighbors];
+                for (size_t i = 0; i < *n_neighbors; ++i) {
+                    c_neighbors[i].first = neighbors[i].first;
+                    c_neighbors[i].second = new char[neighbors[i].second.length() + 1];
+                    strcpy(c_neighbors[i].second, neighbors[i].second.c_str());
+                }
+                result->result = c_neighbors;
+            }
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
         }
-
-        auto* c_neighbors = new fasttext_get_float_char_pair_t[*n_neighbors];
-        for (size_t i = 0; i < *n_neighbors; ++i) {
-            c_neighbors[i].first = neighbors[i].first;
-            c_neighbors[i].second = new char[neighbors[i].second.length() + 1];
-            strcpy(c_neighbors[i].second, neighbors[i].second.c_str());
-        }
-        return c_neighbors;
+        return *result;
     }
 
-    fasttext_get_float_char_pair_t* fasttext_get_analogies(
+    FloatCharPairResult fasttext_get_analogies(
         const fasttext_t* ft,
         const int32_t k,
         const char* wordA,
@@ -168,75 +200,139 @@ extern "C" {
         const char* wordC,
         size_t* n_analogies
     ) {
-        const std::vector<std::pair<fasttext::real, std::string>> analogies = ft->ft->getAnalogies(
-            k,
-            std::string(wordA),
-            std::string(wordB),
-            std::string(wordC)
-        );
+        const auto result = new FloatCharPairResult();
+        try {
+            const std::vector<std::pair<fasttext::real, std::string>> analogies = ft->ft->getAnalogies(
+                k,
+                std::string(wordA),
+                std::string(wordB),
+                std::string(wordC)
+            );
 
-        *n_analogies = analogies.size();
-        if (*n_analogies == 0) {
-            return nullptr;
+            *n_analogies = analogies.size();
+            if (*n_analogies == 0) {
+                result->result = nullptr;
+            } else {
+                auto* c_analogies = new fasttext_float_char_pair_t[*n_analogies];
+                for (size_t i = 0; i < *n_analogies; ++i) {
+                    c_analogies[i].first = analogies[i].first;
+                    c_analogies[i].second = new char[analogies[i].second.length() + 1];
+                    strcpy(c_analogies[i].second, analogies[i].second.c_str());
+                }
+                result->result = c_analogies;
+            }
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
         }
+        return *result;
+    }
 
-        auto* c_analogies = new fasttext_get_float_char_pair_t[*n_analogies];
-        for (size_t i = 0; i < *n_analogies; ++i) {
-            c_analogies[i].first = analogies[i].first;
-            c_analogies[i].second = new char[analogies[i].second.length() + 1];
-            strcpy(c_analogies[i].second, analogies[i].second.c_str());
+    Int32Result fasttext_get_word_id(const fasttext_t *ft, const char *word) {
+        const auto result = new Int32Result();
+        try {
+            result->result = ft->ft->getWordId(std::string(word));
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
         }
-        return c_analogies;
+        return *result;
     }
 
-    int32_t fasttext_get_word_id(const fasttext_t *ft, const char *word) {
-        return ft->ft->getWordId(std::string(word));
-    }
-
-    int32_t fasttext_get_subword_id(const fasttext_t *ft, const char *word) {
-        return ft->ft->getSubwordId(std::string(word));
-    }
-
-    void fasttext_save_model(const fasttext_t* ft, const char* path) {
-        ft->ft->saveModel(std::string(path));
-    }
-
-    int fasttext_get_dimension(const fasttext_t* ft) {
-        return ft->ft->getDimension();
-    }
-
-    void fasttext_get_word_vector(const fasttext_t* ft, const char* word, float* vec) {
-        fasttext::Vector v(ft->ft->getDimension());
-        ft->ft->getWordVector(v, std::string(word));
-        for (int i = 0; i < v.size(); ++i) {
-            vec[i] = v[i];
+    Int32Result fasttext_get_subword_id(const fasttext_t *ft, const char *word) {
+        const auto result = new Int32Result();
+        try {
+            result->result = ft->ft->getSubwordId(std::string(word));
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
         }
+        return *result;
     }
 
-    void fasttext_get_sentence_vector(const fasttext_t* ft, const char* text, float* vec) {
-        fasttext::Vector v(ft->ft->getDimension());
-        std::stringstream ss(text);
-        ft->ft->getSentenceVector(ss, v);
-        for (int i = 0; i < v.size(); ++i) {
-            vec[i] = v[i];
+    VoidResult fasttext_save_model(const fasttext_t* ft, const char* path) {
+        const auto result = new VoidResult();
+        try {
+            ft->ft->saveModel(std::string(path));
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
         }
+        return *result;
     }
 
-    fasttext_prediction_t* fasttext_predict(const fasttext_t* ft, const char* text, const int32_t k, const float threshold, size_t* n_predictions) {
-        std::stringstream ss(text);
-        std::vector<std::pair<fasttext::real, std::string>> predictions;
-        ft->ft->predictLine(ss, predictions, k, threshold);
-
-        *n_predictions = predictions.size();
-        auto* c_predictions = new fasttext_prediction_t[*n_predictions];
-
-        for (int i = 0; i < *n_predictions; ++i) {
-            c_predictions[i].probability = predictions[i].first;
-            c_predictions[i].label = new char[predictions[i].second.length() + 1];
-            strcpy(c_predictions[i].label, predictions[i].second.c_str());
+    IntResult fasttext_get_dimension(const fasttext_t* ft) {
+        const auto result = new IntResult();
+        try {
+            result->result = ft->ft->getDimension();
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
         }
+        return *result;
+    }
 
-        return c_predictions;
+    VoidResult fasttext_get_word_vector(const fasttext_t* ft, const char* word, float* vec) {
+        const auto result = new VoidResult();
+        try {
+            fasttext::Vector v(ft->ft->getDimension());
+            ft->ft->getWordVector(v, std::string(word));
+            for (int i = 0; i < v.size(); ++i) {
+                vec[i] = v[i];
+            }
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
+        }
+        return *result;
+    }
+
+    VoidResult fasttext_get_sentence_vector(const fasttext_t* ft, const char* text, float* vec) {
+        const auto result = new VoidResult();
+        try {
+            fasttext::Vector v(ft->ft->getDimension());
+            std::stringstream ss(text);
+            ft->ft->getSentenceVector(ss, v);
+            for (int i = 0; i < v.size(); ++i) {
+                vec[i] = v[i];
+            }
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
+        }
+        return *result;
+    }
+
+    FastTextPredictionResult fasttext_predict(const fasttext_t* ft, const char* text, const int32_t k, const float threshold, size_t* n_predictions) {
+        const auto result = new FastTextPredictionResult();
+        try {
+            std::stringstream ss(text);
+            std::vector<std::pair<fasttext::real, std::string>> predictions;
+            ft->ft->predictLine(ss, predictions, k, threshold);
+
+            *n_predictions = predictions.size();
+            auto* c_predictions = new fasttext_prediction_t[*n_predictions];
+
+            for (int i = 0; i < *n_predictions; ++i) {
+                c_predictions[i].probability = predictions[i].first;
+                c_predictions[i].label = new char[predictions[i].second.length() + 1];
+                strcpy(c_predictions[i].label, predictions[i].second.c_str());
+            }
+
+            result->result = c_predictions;
+        } catch (const std::exception& e) {
+            result->error = e.what();
+        } catch (...) {
+            result->error = "An unknown exception occurred!";
+        }
+        return *result;
     }
 
     void fasttext_free_predictions(const fasttext_prediction_t* predictions, const size_t n_predictions) {

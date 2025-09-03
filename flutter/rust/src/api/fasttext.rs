@@ -1,11 +1,41 @@
-use crate::bindings::{
-  fasttext_delete, fasttext_free_predictions, fasttext_load_model, fasttext_new, fasttext_predict,
-  fasttext_load_model_from_buffer, fasttext_t, fasttext_get_nn, fasttext_free_float_char_pair,
-  fasttext_get_analogies, fasttext_get_word_id, fasttext_get_subword_id, fasttext_save_model,
-  fasttext_get_dimension, fasttext_get_word_vector, fasttext_get_sentence_vector
-};
+use crate::bindings::{fasttext_delete, fasttext_free_predictions, fasttext_load_model, fasttext_new, fasttext_predict, fasttext_load_model_from_buffer, fasttext_t, fasttext_get_nn, fasttext_free_float_char_pair, fasttext_get_analogies, fasttext_get_word_id, fasttext_get_subword_id, fasttext_save_model, fasttext_get_dimension, fasttext_get_word_vector, fasttext_get_sentence_vector, VoidResult, FastTextResult, FastTextPredictionResult, fasttext_prediction_t, FloatCharPairResult, fasttext_float_char_pair_t, Int32Result, IntResult};
 use std::ffi::{c_void, CStr, CString};
 use flutter_rust_bridge::frb;
+
+trait HasError {
+  type ResultType;
+
+  fn error(&self) -> *const std::os::raw::c_char;
+  fn result(&self) -> Self::ResultType;
+}
+
+macro_rules! impl_has_error {
+  ($t:ty, $res:ty) => {
+    impl HasError for $t {
+      type ResultType = $res;
+
+      fn error(&self) -> *const std::os::raw::c_char { self.error }
+      fn result(&self) -> Self::ResultType { self.result }
+    }
+  };
+}
+
+impl_has_error!(FastTextResult, *mut fasttext_t);
+impl_has_error!(VoidResult, *mut std::os::raw::c_void);
+impl_has_error!(FastTextPredictionResult, *mut fasttext_prediction_t);
+impl_has_error!(FloatCharPairResult, *mut fasttext_float_char_pair_t);
+impl_has_error!(Int32Result, i32);
+impl_has_error!(IntResult, std::os::raw::c_int);
+
+fn handle_result<T: HasError>(result: T) -> Result<T::ResultType, String> {
+  let error = result.error();
+  if error.is_null() {
+    Ok(result.result())
+  } else {
+    let err = unsafe { CStr::from_ptr(error).to_string_lossy().into_owned() };
+    Err(err)
+  }
+}
 
 /// A safe Rust wrapper for a fastText model.
 ///
@@ -30,7 +60,9 @@ impl FastText {
   #[frb(sync)]
   pub fn new() -> Result<Self, String> {
     // unsafe block is necessary to call C functions.
-    let handle = unsafe { fasttext_new() };
+    let result = unsafe { fasttext_new() };
+    let handle = handle_result(result)?;
+
     if handle.is_null() {
       Err("Failed to create fastText handle.".to_string())
     } else {
@@ -49,9 +81,9 @@ impl FastText {
 
     // This is safe because we've checked the handle is not null on creation,
     // and the CString is valid.
-    unsafe {
-      fasttext_load_model(self.handle, c_path.as_ptr());
-    }
+    let result = unsafe { fasttext_load_model(self.handle, c_path.as_ptr()) };
+    handle_result(result)?;
+
     Ok(())
   }
 
@@ -62,9 +94,10 @@ impl FastText {
   /// * `buffer` - A byte slice containing the model data.
   pub fn load_model_from_buffer(&mut self, buffer: &[u8]) -> Result<(), String> {
     // This is safe because we've checked the handle is not null on creation.
-    unsafe {
-      fasttext_load_model_from_buffer(self.handle, buffer.as_ptr() as *const c_void, buffer.len());
-    }
+    let result = unsafe {
+      fasttext_load_model_from_buffer(self.handle, buffer.as_ptr() as *const c_void, buffer.len())
+    };
+    handle_result(result)?;
     Ok(())
   }
 
@@ -82,9 +115,10 @@ impl FastText {
     let mut n_predictions: usize = 0;
 
     // The C API allocates memory for the predictions, which we must free.
-    let preds_ptr = unsafe {
+    let result = unsafe {
       fasttext_predict(self.handle, c_text.as_ptr(), k, threshold, &mut n_predictions)
     };
+    let preds_ptr = handle_result(result)?;
 
     if preds_ptr.is_null() {
       return if n_predictions == 0 {
@@ -132,9 +166,10 @@ impl FastText {
     let mut n_neighbors: usize = 0;
 
     // The C API allocates memory for the predictions, which we must free.
-    let neighbors_ptr = unsafe {
+    let result = unsafe {
       fasttext_get_nn(self.handle, c_word.as_ptr(), k, &mut n_neighbors)
     };
+    let neighbors_ptr = handle_result(result)?;
 
     if neighbors_ptr.is_null() {
       return if n_neighbors == 0 {
@@ -188,9 +223,10 @@ impl FastText {
     let mut n_analogies: usize = 0;
 
     // The C API allocates memory for the predictions, which we must free.
-    let analogies_ptr = unsafe {
+    let result = unsafe {
       fasttext_get_analogies(self.handle, k, c_word_a.as_ptr(), c_word_b.as_ptr(), c_word_c.as_ptr(), &mut n_analogies)
     };
+    let analogies_ptr = handle_result(result)?;
 
     if analogies_ptr.is_null() {
       return if n_analogies == 0 {
@@ -232,9 +268,8 @@ impl FastText {
 
     // This is safe because we've checked the handle is not null on creation,
     // and the CString is valid.
-    let word_id = unsafe {
-      fasttext_get_word_id(self.handle, c_word.as_ptr())
-    };
+    let result = unsafe { fasttext_get_word_id(self.handle, c_word.as_ptr()) };
+    let word_id = handle_result(result)?;
 
     Ok(word_id)
   }
@@ -250,9 +285,8 @@ impl FastText {
 
     // This is safe because we've checked the handle is not null on creation,
     // and the CString is valid.
-    let subword_id = unsafe {
-      fasttext_get_subword_id(self.handle, c_word.as_ptr())
-    };
+    let result = unsafe { fasttext_get_subword_id(self.handle, c_word.as_ptr()) };
+    let subword_id = handle_result(result)?;
 
     Ok(subword_id)
   }
@@ -268,18 +302,16 @@ impl FastText {
 
     // This is safe because we've checked the handle is not null on creation,
     // and the CString is valid.
-    unsafe {
-      fasttext_save_model(self.handle, c_path.as_ptr());
-    }
+    let result = unsafe { fasttext_save_model(self.handle, c_path.as_ptr()) };
+    handle_result(result)?;
     Ok(())
   }
 
   /// Get dimension of the model.
   pub fn get_dimension(&self) -> Result<i32, String> {
     // This is safe because we've checked the handle is not null on creation
-    let dimension = unsafe {
-      fasttext_get_dimension(self.handle)
-    };
+    let result = unsafe { fasttext_get_dimension(self.handle) };
+    let dimension = handle_result(result)?;
 
     Ok(dimension)
   }
@@ -299,9 +331,10 @@ impl FastText {
 
     // This is safe because we've checked the handle is not null on creation,
     // and the CString is valid.
-    unsafe {
+    let result = unsafe {
       fasttext_get_word_vector(self.handle, c_word.as_ptr(), vec.as_mut_ptr())
     };
+    handle_result(result)?;
 
     Ok(vec)
   }
@@ -321,9 +354,10 @@ impl FastText {
 
     // This is safe because we've checked the handle is not null on creation,
     // and the CString is valid.
-    unsafe {
+    let result = unsafe {
       fasttext_get_sentence_vector(self.handle, c_word.as_ptr(), vec.as_mut_ptr())
     };
+    handle_result(result)?;
 
     Ok(vec)
   }

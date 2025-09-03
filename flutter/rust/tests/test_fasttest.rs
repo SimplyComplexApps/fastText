@@ -9,13 +9,13 @@ fn test_fasttext_load_model() {
 }
 
 // TODO: Need to catch the error in C/C++ side before crossing the FFI boundary
-// #[test]
-// fn test_fasttext_load_invalid_model() {
-//     let mut fasttext = FastText::new().expect("Failed to create FastText instance");
-//     assert!(fasttext
-//       .load_model("tests/fixtures/invalid.model.bin")
-//       .is_err());
-// }
+#[test]
+fn test_fasttext_load_invalid_model() {
+    let mut fasttext = FastText::new().expect("Failed to create FastText instance");
+    let result = fasttext.load_model("tests/fixtures/invalid.model.bin");
+    assert!(result.is_err());
+    assert_eq!("tests/fixtures/invalid.model.bin has wrong file format!", result.unwrap_err());
+}
 
 #[test]
 fn test_fasttext_predict() {
